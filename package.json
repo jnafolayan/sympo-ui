@@ -1,0 +1,21 @@
+{
+  "name": "sympo-ui",
+  "version": "1.0.0",
+  "description": "online platform for opinion gathering",
+  "main": "dist/index.html",
+  "repository": "https://github.com/jnafolayan/sympo-ui",
+  "author": "John Afolayan (jnafolayan@gmail.com)",
+  "license": "Apache-2.0",
+  "private": false,
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html -d public"
+  },
+  "dependencies": {
+    "@reach/router": "^1.2.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-pose": "^4.0.10",
+    "styled-components": "^4.4.0"
+  }
+}
