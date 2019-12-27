@@ -14,19 +14,19 @@ export default function NotFound() {
 const Wrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 100vh;
   flex-direction: column;
   text-align: center;
   align-items: center;
   justify-content: center;
+  margin-top: 150px;
 
   h2 {
     font-size: 3rem;
     font-family: Poppins, sans-serif;
     color: #333;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
   }
-
+  
   p {
     font-size: 1.2rem;
     font-family: "Open Sans", sans-serif;
@@ -35,7 +35,7 @@ const Wrapper = styled.div`
     margin: 0 auto;
 
     a {
-      color: hsl(150, 100%, 48%);
+      color: hsl(150, 90%, 40%);
     }
   }
 `;
