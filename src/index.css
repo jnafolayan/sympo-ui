@@ -31,6 +31,7 @@ button {
 	border-radius: 8px;
 	border: none;
 	background: transparent;
+	font-family: "Open Sans", sans-serif;
 }
 
 button:hover {

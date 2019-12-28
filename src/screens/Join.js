@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "@reach/router";
+import { useDispatch } from "react-redux";
+import { Link, navigate } from "@reach/router";
 import styled from "styled-components";
+import axios from "axios";
 import { Form, Group, Input, Checkbox, Title, Alt } from "../components/Form";
+import prefixAPI from "../util/prefixAPI";
+import { userActions } from "../store/actions";
 
 export default function Signin() {
   const [authPayload, setAuthPayload] = useState({
+    username: "",
     email: "",
     password: ""
   });
   const [rememberMe, setRememberMe] = useState(false);
+  const authDispatch = useDispatch();
 
   const handleFormInput = ({ target }) => {
     const { name, value } = target;
@@ -24,8 +30,17 @@ export default function Signin() {
 
   const submitForm = (event) => {
     event.preventDefault();
-    console.log({ authPayload });
-    console.log({ rememberMe });
+    axios.post(prefixAPI("/auth/signup"), authPayload)
+      .then(({ data }) => {
+        const { username, email, token } = data.data;
+        authDispatch(
+          userActions.setUser({ username, email, token })
+        );
+        navigate("/");
+      })
+      .catch(err => {
+        console.error(err);
+      });
   };
 
   return (
@@ -35,6 +50,9 @@ export default function Signin() {
           <Title>Sign up</Title>
           <Form onSubmit={submitForm}>
             <Group>
+              <Input type="text" name="username" placeholder="Username" onInput={handleFormInput} />
+            </Group>
+            <Group>
               <Input type="email" name="email" placeholder="Email" onInput={handleFormInput} />
             </Group>
             <Group>
@@ -42,7 +60,7 @@ export default function Signin() {
             </Group>
             <Group>
               <FormFooter>
-                <button type="submit">Sign in</button>
+                <button type="submit">Sign up</button>
               </FormFooter>
             </Group>
           </Form>

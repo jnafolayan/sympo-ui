@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 import styled from "styled-components";
+import axios from "axios";
 import { Form, Group, Input, Textarea, Label, Title } from "../components/Form";
 import PollOptions from "./CreatePoll/PollOptions";
+import prefixAPI from "../util/prefixAPI";
 
 export default function Signin() {
   const [payload, setPayload] = useState({
@@ -51,7 +53,11 @@ export default function Signin() {
 
   const submitForm = (event) => {
     event.preventDefault();
-    console.log({ payload });
+    axios.post(prefixAPI("/polls"), payload)
+      .then(({ data }) => {
+        const { _id } = data.data;
+        navigate("/polls/" + _id);
+      });
   };
 
   return (

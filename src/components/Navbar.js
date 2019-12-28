@@ -1,8 +1,17 @@
 import React from "react";
-import { Link } from "@reach/router";
+import { useDispatch } from "react-redux";
+import { Link, navigate } from "@reach/router";
 import styled from "styled-components";
+import { userActions } from "../store/actions";
 
 export default function Navbar({ loggedIn }) {
+  const dispatch = useDispatch();
+
+  const logOut = () => {
+    dispatch(userActions.deleteUser());
+    navigate(location.pathname, { replace: true });
+  };
+
   return (
     <Wrapper>
       <div className="container">
@@ -12,8 +21,8 @@ export default function Navbar({ loggedIn }) {
         <Menu>
           <Link to="/create-poll">Start a poll</Link>
           { loggedIn ? 
-            <Link to="/sign-out">Sign out</Link> :
-            <Link to="/sign-in">Sign in</Link>
+            <span onClick={logOut}><a href="#">Sign out</a></span> :
+            <Link to={"/sign-in?redirect=" + location.pathname}>Sign in</Link>
           }
         </Menu>
       </div>
