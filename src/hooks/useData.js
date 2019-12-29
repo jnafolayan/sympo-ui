@@ -37,7 +37,7 @@ export default function useData(initialQuery, initialState=null) {
   const execQuery = (string) => setQuery(string);
 
   const overrideData = (newData) => {
-    query = null;
+    setQuery(null);
     setData(newData);
   };
 

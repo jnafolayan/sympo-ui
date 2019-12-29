@@ -5,24 +5,42 @@ import axios from "axios";
 import styled from "styled-components";
 import useData from "../hooks/useData";
 import AdHoc from "../components/AdHoc";
+import Comments from "../components/Comments";
 import prefixAPI from "../util/prefixAPI";
 
 export default function ViewPoll({ poll_id }) {
   const [{ 
     data: pollData, 
     isLoading: pollLoading, 
-    isError: pollError 
-  }, fetchPollData] = useData(buildPollQuery(poll_id), null);
+    isError: pollError
+  }] = useData(buildPollQuery(poll_id), null);
+  const [{
+    data: comments,
+    overrideData: setComments
+  }] = useData(prefixAPI("/comments?poll=" + poll_id), null);
   const [poll, setPoll] = useState(null);
   const [votes, setVotes] = useState(null);
 
   useEffect(() => {
-    // listen for votes
+    // listen for votes, and comments
     const channel = subscribe(poll_id);
     channel.bind("vote", data => {
       setVotes(data.votes);
     });
-  }, []);
+    channel.bind("comment", data => {
+      const newComments = (comments || []).concat([data]);
+      // newComments.sort((a, b) => b.upvotes - a.upvotes);
+      setComments(newComments);
+    });
+    channel.bind("upvote", ({ commentId, upvotes }) => {
+      if (!comments) return;
+      const comment = comments.find(co => co._id == commentId);
+      if (!comment) return;
+      comment.upvotes = upvotes;
+      comments.sort((a, b) => b.upvotes - a.upvotes);
+      setComments(comments);
+    });
+  }, [comments]);
 
   useEffect(() => {
     if (!pollData) {
@@ -51,6 +69,30 @@ export default function ViewPoll({ poll_id }) {
     axios.post(buildPollQuery(poll_id) + "/vote", { optionId })
       .then(data => {
         //pass
+      })
+      .catch(err => console.error(err));
+  };
+
+  const makeComment = (message) => {
+    const payload = {
+      message,
+      poll: poll_id
+    };
+
+    axios.post(prefixAPI("/comments"), payload)
+      .then(data => {
+        // pass. Pusher will take care of updates
+      })
+      .catch(err => console.error(err));
+  };
+
+  const upVote = (commentId) => {
+    const comment = comments.find(co => co._id == commentId);
+    if (!comment) return;
+
+    axios.post(prefixAPI(`/comments/${commentId}/upvote`))
+      .then(data => {
+        // pass. Pusher will take care of updates
       })
       .catch(err => console.error(err));
   };
@@ -110,6 +152,22 @@ export default function ViewPoll({ poll_id }) {
             <VotesCount>
               {Object.values(votes).reduce((accum, t) => accum + t, 0) + " votes"}
             </VotesCount>
+          }
+        />
+      </div>
+
+      {/* Comments */}
+      <div className="container">
+        <AdHoc
+          height="3.5rem"
+          bottom="8px"
+          awaiting={comments}
+          render={() => 
+            <Comments 
+              comments={comments} 
+              onMakeComment={makeComment} 
+              onUpVote={upVote} 
+            />
           }
         />
       </div>

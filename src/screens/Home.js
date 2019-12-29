@@ -13,7 +13,7 @@ export default function ViewPoll({ poll_id }) {
     isLoading, 
     isError,
     overrideData: setPolls 
-  }] = useData(prefixAPI("/polls"), []);
+  }] = useData(prefixAPI("/polls"), null);
 
   useEffect(() => {
     // listen for new polls
@@ -29,7 +29,7 @@ export default function ViewPoll({ poll_id }) {
         <AdHoc 
           height="9rem" 
           bottom="1rem"
-          awaiting={!!polls.length}
+          awaiting={polls}
           render={() => 
             polls.map(poll => (
               <PollContainer key={poll._id}>
@@ -44,12 +44,12 @@ export default function ViewPoll({ poll_id }) {
         <AdHoc 
           height="9rem" 
           bottom="1rem"
-          awaiting={!!polls.length} 
+          awaiting={polls} 
           render={() => null}
         />
         <AdHoc 
           height="9rem" 
-          awaiting={!!polls.length} 
+          awaiting={polls} 
           render={() => null}
         />
       </div>
