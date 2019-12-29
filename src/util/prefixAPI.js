@@ -2,7 +2,7 @@ let baseURL;
 const env = process.env.NODE_ENV;
 
 if (env == "production")
-  baseURL = "";
+  baseURL = "https://sympo-server.herokuapp.com/api/v1";
 else
   baseURL = "http://localhost:8080/api/v1";
 
