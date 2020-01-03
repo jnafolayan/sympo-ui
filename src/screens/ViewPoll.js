@@ -180,7 +180,7 @@ const PollTitle = styled.h3`
   color: #333;
   font-family: Poppins, sans-serif;
   word-break: break-word;
-  letter-spacing: 0.01rem;
+  letter-spacing: 0rem;
 `;
 
 const PollDetails = styled.p`
