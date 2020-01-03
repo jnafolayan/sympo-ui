@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, navigate } from "@reach/router";
 import styled from "styled-components";
 import axios from "axios";
@@ -59,6 +59,11 @@ export default function Signin() {
         navigate("/polls/" + _id);
       });
   };
+
+  useEffect(() => {
+    if (!localStorage.token)
+      navigate("/sign-in");
+  }, []);
 
   return (
     <div className="container">
