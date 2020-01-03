@@ -181,6 +181,7 @@ const PollTitle = styled.h3`
   font-family: Poppins, sans-serif;
   word-break: break-word;
   letter-spacing: 0rem;
+  line-height: 2rem;
 `;
 
 const PollDetails = styled.p`
